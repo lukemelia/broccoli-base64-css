@@ -1,0 +1,14 @@
+{
+  "name": "broccoli-base64-css",
+  "version": "0.0.0",
+  "description": "Replace refrences to images in CSS with base64 strings",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Moudy",
+  "license": "MIT",
+  "dependencies": {
+    "broccoli-filter": "^0.1.6"
+  }
+}
