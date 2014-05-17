@@ -1,6 +1,6 @@
 ## broccoli-base64-css
 
-[Broccoli](https://github.com/broccolijs/broccoli) plugin to replace refrences to images in CSS with base64 strings.
+[Broccoli](https://github.com/broccolijs/broccoli) plugin to replace references to images in CSS with base64 strings.
 
 ### Install
 ```
