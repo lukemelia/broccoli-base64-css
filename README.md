@@ -14,7 +14,7 @@ var base64CSS = require('broccoli-base64-css');
 // Example with default options
 var tree = base64CSS(tree, {
   imagePath: 'public'
-, maxFilesize: 4096 // larger files will be left untouched
+, maxFileSize: 4096 // larger files will be left untouched
 , extensions: ['css']
 });
 ```
