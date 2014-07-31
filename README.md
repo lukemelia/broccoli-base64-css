@@ -16,6 +16,7 @@ var tree = base64CSS(tree, {
   imagePath: 'public'
 , maxFileSize: 4096 // larger files will be left untouched
 , extensions: ['css']
+, fileTypes: ['png', 'jpg', 'jpeg', 'gif', 'svg']
 });
 ```
 
