@@ -1,6 +1,6 @@
 {
   "name": "broccoli-base64-css",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Replace references to images in CSS with base64 strings",
   "repository": "https://github.com/moudy/broccoli-base64-css",
   "main": "index.js",
