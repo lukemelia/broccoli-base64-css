@@ -15,20 +15,24 @@ function Base64CSS (inputTree, options) {
   this.extensions = options.extensions || ['css'];
   this.maxFileSize = options.maxFileSize || 4096;
   this.fileTypes = options.fileTypes || ['png', 'jpg', 'jpeg', 'gif', 'svg'];
-  this.fileTypesRegex = new RegExp('url\\(["\']?(\\S*)\\.('+this.fileTypes.join('|')+')["\']?\\)', 'g');
+  this.urlsRegex = /url\(["\']?(.+?)["\']?\)/g;
 }
 module.exports = Base64CSS;
 
 Base64CSS.prototype.processString = function(string) {
   var imagePath = this.imagePath;
   var maxFileSize = this.maxFileSize;
+  var fileTypes = this.fileTypes;
 
-  return string.replace(this.fileTypesRegex, function(match, file, type) {
-    var fileName = file + '.' + type;
+  return string.replace(this.urlsRegex, function(match, fileName) {
+    var type = path.extname(fileName).substr(1);
+    if (!~fileTypes.indexOf(type)) return match;
+
     var filePath = path.join(imagePath, fileName);
     var size = fs.statSync(filePath).size;
 
     if (size > maxFileSize) return match;
+
     if (type === 'jpg') type = 'jpeg';
     if (type === 'svg') type = 'svg+xml';
 
@@ -36,4 +40,3 @@ Base64CSS.prototype.processString = function(string) {
     return 'url("data:image/' + type + ';base64,' + base64 + '")';
   });
 };
-
