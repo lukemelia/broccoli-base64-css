@@ -48,9 +48,16 @@ Base64CSS.prototype.processString = function(string) {
     if (/ttf|otf|woff|eot/.test(extension)) {
       prefix = 'application';
       filePath = path.join(fontPath, fileName);
+    } else if (/svg/.test(extension)) {
+      filePath = path.join(fontPath, fileName);
+      if (!fs.existsSync(filePath)) {
+        filePath = path.join(imagePath, fileName);
+      }
     } else {
       filePath = path.join(imagePath, fileName);
     }
+
+    if (!fs.existsSync(filePath)) return match;
 
     var size = fs.statSync(filePath).size;
     if (size > maxFileSize) return match;
