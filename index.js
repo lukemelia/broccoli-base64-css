@@ -2,6 +2,15 @@ var fs = require('fs');
 var path = require('path');
 var Filter = require('broccoli-filter');
 
+var MEDIATYPE_MAP = {
+  ttf: 'x-font-truetype',
+  otf: 'x-font-opentype',
+  woff: 'font-woff',
+  eot: 'vnd.ms-fontobject',
+  jpg: 'jpeg',
+  svg: 'svg+xml'
+};
+
 Base64CSS.prototype = Object.create(Filter.prototype);
 Base64CSS.prototype.constructor = Base64CSS;
 function Base64CSS (inputTree, options) {
@@ -29,22 +38,17 @@ Base64CSS.prototype.processString = function(string) {
 
   return string.replace(this.urlsRegex, function(match, fileName) {
     fileName = fileName.replace(/(\?)?(#)(.*)\b/g, '');
-    var type = path.extname(fileName).substr(1);
-    if (!~fileTypes.indexOf(type)) return match;
+    var extension = path.extname(fileName).substr(1);
+    var type = MEDIATYPE_MAP[extension] || extension;
+    if (!~fileTypes.indexOf(extension)) return match;
 
     var prefix = 'image';
     var filePath;
 
-    if (['ttf', 'otf', 'woff', 'eot'].indexOf(type) !== -1) {
+    if (/ttf|otf|woff|eot/.test(extension)) {
       prefix = 'application';
-      if (type === 'ttf') type = 'x-font-truetype';
-      if (type === 'otf') type = 'x-font-opentype';
-      if (type === 'woff') type = 'font-woff';
-      if (type === 'eot') type = 'vnd.ms-fontobject';
       filePath = path.join(fontPath, fileName);
     } else {
-      if (type === 'jpg') type = 'jpeg';
-      if (type === 'svg') type = 'svg+xml';
       filePath = path.join(imagePath, fileName);
     }
 
