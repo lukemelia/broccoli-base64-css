@@ -37,6 +37,7 @@ Base64CSS.prototype.processString = function(string) {
   var fileTypes = this.fileTypes;
 
   return string.replace(this.urlsRegex, function(match, fileName) {
+    if (/^data:/.test(fileName)) return match;
     fileName = fileName.replace(/(\?)?(#)(.*)\b/g, '');
     var extension = path.extname(fileName).substr(1);
     var type = MEDIATYPE_MAP[extension] || extension;
