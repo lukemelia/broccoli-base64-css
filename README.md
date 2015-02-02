@@ -18,6 +18,9 @@ var tree = base64CSS(tree, {
 , maxFileSize: 4096 // larger files will be left untouched
 , extensions: ['css']
 , fileTypes: ['png', 'jpg', 'jpeg', 'gif', 'svg']
+, assetsFromTree: false // look for images in same tree
+                        // as css, rather than at static paths
+                        // default: false
 });
 ```
 

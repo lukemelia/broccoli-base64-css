@@ -19,20 +19,36 @@ function Base64CSS (inputTree, options) {
   options = options || {};
   options.imagePath || (options.imagePath = 'public');
   options.fontPath || (options.fontPath = 'public');
+  options.assetsFromTree || (options.assetsFromTree = false);
 
   this.inputTree = inputTree;
-  this.imagePath = path.join(process.cwd(), options.imagePath);
-  this.fontPath = path.join(process.cwd(), options.fontPath);
+  this.imagePath = options.imagePath;
+  this.fontPath = options.fontPath;
   this.extensions = options.extensions || ['css'];
   this.maxFileSize = options.maxFileSize || 4096;
   this.fileTypes = options.fileTypes || ['png', 'jpg', 'jpeg', 'gif', 'svg'];
   this.urlsRegex = /url\(["\']?(.+?)["\']?\)/g;
+  this.assetsFromTree = options.assetsFromTree;
 }
 module.exports = Base64CSS;
 
-Base64CSS.prototype.processString = function(string) {
-  var imagePath = this.imagePath;
-  var fontPath = this.fontPath;
+Base64CSS.prototype.write = function (readTree, destDir) {
+  var self = this
+  return readTree(this.inputTree).then(function (srcDir) {
+    if (self.assetsFromTree) {
+      self.fullImagePath = path.join(srcDir, self.imagePath);
+      self.fullFontPath = path.join(srcDir, self.fontPath);
+    } else {
+      self.fullImagePath = path.join(process.cwd(), self.imagePath);
+      self.fullFontPath = path.join(process.cwd(), self.fontPath);
+    }
+    return Filter.prototype.write.call(self, readTree, destDir);
+  });
+}
+
+Base64CSS.prototype.processString = function(string, relativePath) {
+  var imagePath = this.fullImagePath;
+  var fontPath = this.fullFontPath;
   var maxFileSize = this.maxFileSize;
   var fileTypes = this.fileTypes;
 
@@ -67,3 +83,5 @@ Base64CSS.prototype.processString = function(string) {
     return 'url("data:' + prefix + '/' + type + ';base64,' + base64 + '")';
   });
 };
+
+
